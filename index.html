@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Little Something For Nilachal ✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display, Dancing Script, and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for the Finale -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fff1f5 0%, #ffe4ec 35%, #fbcfe8 75%, #f9a8d4 100%);
+            color: #4c0519;
+        }
+
+        .font-serif-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-script {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Frosted Pink Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow:
+                0 20px 50px -12px rgba(219, 39, 119, 0.22),
+                0 4px 16px -2px rgba(244, 63, 94, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.95);
+            max-height: calc(100dvh - 1.75rem);
+        }
+
+        /* Responsive Fluid Typography */
+        .cover-title {
+            font-size: clamp(1.9rem, 6.2vw, 2.75rem);
+            line-height: 1.18;
+        }
+
+        .slide-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.35rem, 4.8vw, 1.85rem);
+            line-height: 1.25;
+        }
+
+        .slide-body {
+            font-size: clamp(0.9rem, 3.5vw, 1.03rem);
+            line-height: 1.68;
+        }
+
+        /* Slide Transition States */
+        .slide-panel {
+            transition: opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1), transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .slide-hidden {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+        }
+
+        .slide-active {
+            display: flex !important;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            animation: fadeSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.985);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Pink Gradient Button with Soft Glow */
+        .btn-pink-glow {
+            background: linear-gradient(135deg, #f43f5e 0%, #ec4899 55%, #db2777 100%);
+            box-shadow: 0 8px 22px -4px rgba(236, 72, 153, 0.5);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+
+        .btn-pink-glow:hover {
+            filter: brightness(1.05);
+            box-shadow: 0 10px 26px -4px rgba(236, 72, 153, 0.65);
+        }
+
+        .btn-pink-glow:active {
+            transform: scale(0.96);
+        }
+
+        /* Envelope Wax Seal Pulse */
+        .wax-seal {
+            background: radial-gradient(circle at 30% 30%, #fb7185, #e11d48 65%, #9f1239 100%);
+            box-shadow:
+                0 10px 25px -4px rgba(225, 29, 72, 0.45),
+                inset 0 2px 4px rgba(255, 255, 255, 0.45),
+                inset 0 -3px 6px rgba(136, 19, 55, 0.4);
+            animation: gentleFloat 3.4s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(2deg); }
+        }
+
+        /* Floating Petals & Sparkles */
+        .floating-item {
+            position: absolute;
+            bottom: -40px;
+            opacity: 0;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+            filter: drop-shadow(0 2px 6px rgba(244, 114, 182, 0.25));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.85);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.75;
+            }
+            85% {
+                opacity: 0.65;
+            }
+            100% {
+                transform: translateY(-108dvh) rotate(360deg) scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        /* Decorative Blobs */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(65px);
+            z-index: 0;
+            opacity: 0.55;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-3.5 sm:p-6 select-none relative">
+
+    <!-- Background Music Audio Element (Loops automatically & seamlessly) -->
+    <audio id="bgMusic" src="Bdaymusic_2.mp3" loop autoplay preload="auto"></audio>
+
+    <!-- Soft Ambient Pink Background Blobs -->
+    <div class="bg-blob w-64 h-64 sm:w-80 sm:h-80 bg-pink-300 top-[-40px] left-[-40px]"></div>
+    <div class="bg-blob w-72 h-72 sm:w-96 sm:h-96 bg-rose-300 bottom-[-60px] right-[-40px]"></div>
+    <div class="bg-blob w-56 h-56 sm:w-64 sm:h-64 bg-fuchsia-200 top-[35%] left-[55%]"></div>
+
+    <!-- Floating Sparkles & Petals Container -->
+    <div id="floating-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <!-- Main E-Card Container -->
+    <main id="card-container" class="glass-card relative z-10 w-full max-w-lg rounded-[1.75rem] sm:rounded-[2rem] px-5 py-6 sm:p-9 flex flex-col justify-between transition-all duration-300 overflow-hidden">
+
+        <!-- Top Progress Header (Hidden on Front Cover Slide 0) -->
+        <header id="wish-header" class="hidden items-center justify-between mb-4 sm:mb-5 pb-2.5 border-b border-pink-200/60">
+            <span id="slide-indicator" class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-pink-600">
+                Wish 1 of 5
+            </span>
+            <div id="progress-dots" class="flex items-center gap-1.5"></div>
+        </header>
+
+        <!-- Slides Wrapper -->
+        <div class="flex-1 flex flex-col justify-center">
+
+            <!-- SLIDE 0: Sealed Front Cover -->
+            <section id="slide-0" onclick="openCard()" class="slide-panel slide-active flex flex-col items-center justify-center text-center py-4 sm:py-6 cursor-pointer">
+                <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-pink-100/90 border border-pink-200 text-pink-700 text-[11px] sm:text-xs font-semibold tracking-wide uppercase mb-5 shadow-xs">
+                    <span>💌</span> Special Delivery
+                </div>
+
+                <!-- Wax Seal Emblem -->
+                <div class="wax-seal w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-white text-3xl sm:text-4xl font-script font-bold mb-5 border-4 border-pink-200/70">
+                    N
+                </div>
+
+                <p class="text-xs sm:text-sm uppercase tracking-[0.2em] text-rose-500 font-semibold mb-1.5">
+                    Exclusively Made For
+                </p>
+
+                <h1 class="cover-title font-serif-display font-bold text-rose-950 mb-3">
+                    A Little Something For <span class="font-script text-pink-600 text-4xl sm:text-5xl block mt-1">Nilachal ✨</span>
+                </h1>
+
+                <p class="text-xs sm:text-sm text-rose-800/80 max-w-xs mx-auto leading-relaxed mb-7">
+                    There are a few words waiting inside this envelope—made just to bring a smile to your face today.
+                </p>
+
+                <button type="button" onclick="event.stopPropagation(); openCard();" class="btn-pink-glow px-7 py-3.5 rounded-2xl text-white font-semibold text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer">
+                    <span>Tap to Open</span> <span>✨</span>
+                </button>
+            </section>
+
+            <!-- SLIDE 1: Warm Opening & Her Vibe -->
+            <section id="slide-1" class="slide-panel slide-hidden flex flex-col justify-between flex-1">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-100 border border-pink-200 text-pink-700 text-[11px] sm:text-xs font-semibold mb-2.5 sm:mb-3">
+                        <span>🌸</span> First Things First
+                    </div>
+                    <h2 class="slide-title font-bold text-rose-950 mb-2.5 sm:mb-3">
+                        Some People Just Have That Effortless Magic, <span class="text-pink-600 italic">Nilachal</span> ✨
+                    </h2>
+                    <p class="slide-body text-rose-900/90 font-normal">
+                        Today is one of those days that automatically feels a little brighter just because it belongs to you. There is a rare, effortless warmth in the way you carry yourself—calm, genuine, and quietly unforgettable. You don’t even have to try hard to leave a lasting impression; your presence alone makes ordinary moments feel so much lighter and happier.
+                    </p>
+                </div>
+
+                <div class="mt-5 sm:mt-7 pt-3.5 border-t border-pink-200/70 flex items-center justify-between gap-2.5">
+                    <button type="button" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-white/80 hover:bg-white text-pink-700 font-semibold text-xs sm:text-sm border border-pink-200 shadow-xs transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>←</span> Go Back
+                    </button>
+                    <button type="button" onclick="nextSlide()" class="btn-pink-glow px-5 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>Next</span> <span>→</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SLIDE 2: Her Smile & Kindness -->
+            <section id="slide-2" class="slide-panel slide-hidden flex flex-col justify-between flex-1">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 border border-rose-200 text-rose-700 text-[11px] sm:text-xs font-semibold mb-2.5 sm:mb-3">
+                        <span>🌷</span> Your Best Quality
+                    </div>
+                    <h2 class="slide-title font-bold text-rose-950 mb-2.5 sm:mb-3">
+                        A Smile That Completely Changes the Mood 💖
+                    </h2>
+                    <p class="slide-body text-rose-900/90 font-normal">
+                        If there’s one thing worth celebrating today, it’s your heart and that genuine smile of yours. You have this natural kindness that makes people feel heard, comfortable, and valued without ever making a show of it. In a world that rushes past the little things, the grace and thoughtfulness you bring to the people around you is honestly something to admire.
+                    </p>
+                </div>
+
+                <div class="mt-5 sm:mt-7 pt-3.5 border-t border-pink-200/70 flex items-center justify-between gap-2.5">
+                    <button type="button" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-white/80 hover:bg-white text-pink-700 font-semibold text-xs sm:text-sm border border-pink-200 shadow-xs transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>←</span> Go Back
+                    </button>
+                    <button type="button" onclick="nextSlide()" class="btn-pink-glow px-5 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>Next</span> <span>→</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SLIDE 3: Her Strength & Grace -->
+            <section id="slide-3" class="slide-panel slide-hidden flex flex-col justify-between flex-1">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-100 border border-pink-200 text-pink-700 text-[11px] sm:text-xs font-semibold mb-2.5 sm:mb-3">
+                        <span>🦋</span> Pure Elegance
+                    </div>
+                    <h2 class="slide-title font-bold text-rose-950 mb-2.5 sm:mb-3">
+                        Strong, Graceful, and Unapologetically You 💫
+                    </h2>
+                    <p class="slide-body text-rose-900/90 font-normal">
+                        Every year you grow into an even more inspiring version of yourself. Whether you’re chasing your goals, handling tough days with quiet resilience, or laughing over the smallest things, you do it all with a charm that is completely yours. Never dim your light for anyone, Nilachal—the way you shine just as you are is already more than enough.
+                    </p>
+                </div>
+
+                <div class="mt-5 sm:mt-7 pt-3.5 border-t border-pink-200/70 flex items-center justify-between gap-2.5">
+                    <button type="button" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-white/80 hover:bg-white text-pink-700 font-semibold text-xs sm:text-sm border border-pink-200 shadow-xs transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>←</span> Go Back
+                    </button>
+                    <button type="button" onclick="nextSlide()" class="btn-pink-glow px-5 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>Next</span> <span>→</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SLIDE 4: Wishes for the Upcoming Year -->
+            <section id="slide-4" class="slide-panel slide-hidden flex flex-col justify-between flex-1">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 border border-rose-200 text-rose-700 text-[11px] sm:text-xs font-semibold mb-2.5 sm:mb-3">
+                        <span>🌙</span> For Your New Chapter
+                    </div>
+                    <h2 class="slide-title font-bold text-rose-950 mb-2.5 sm:mb-3">
+                        May This Year Give You Every Reason to Smile 🎀
+                    </h2>
+                    <p class="slide-body text-rose-900/90 font-normal">
+                        As you step into a brand-new chapter, I hope life surprises you with the sweetest moments—peaceful mornings, dreams falling right into place, spontaneous laughter, and people who appreciate you the way you truly deserve. Whatever you’re secretly wishing for when you blow out your candles today, I genuinely hope it finds its way to you.
+                    </p>
+                </div>
+
+                <div class="mt-5 sm:mt-7 pt-3.5 border-t border-pink-200/70 flex items-center justify-between gap-2.5">
+                    <button type="button" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-white/80 hover:bg-white text-pink-700 font-semibold text-xs sm:text-sm border border-pink-200 shadow-xs transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>←</span> Go Back
+                    </button>
+                    <button type="button" onclick="nextSlide()" class="btn-pink-glow px-5 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>Next</span> <span>→</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SLIDE 5: Grand Birthday Finale -->
+            <section id="slide-5" class="slide-panel slide-hidden flex flex-col justify-between flex-1">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-pink-100 to-rose-100 border border-pink-300 text-pink-700 text-[11px] sm:text-xs font-semibold mb-2.5 sm:mb-3 shadow-xs">
+                        <span>🎂</span> The Grand Finale
+                    </div>
+                    <h2 class="slide-title font-bold text-rose-950 mb-2.5 sm:mb-3">
+                        Happy Birthday, <span class="text-pink-600 italic">Nilachal!</span> 🥳
+                    </h2>
+                    <p class="slide-body text-rose-900/90 font-normal">
+                        Today is completely yours—soak in every bit of love, laughter, cake, and good energy coming your way. Thank you for simply being you and making everything around you a little more wonderful just by showing up. Have the happiest, sweetest, and most unforgettable birthday ever! 🌸🥂✨
+                    </p>
+                </div>
+
+                <!-- Navigation Footer (Slide 5) -->
+                <div class="mt-5 sm:mt-7 pt-3.5 border-t border-pink-200/70 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                    <button type="button" onclick="prevSlide()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white/80 hover:bg-white text-pink-700 font-semibold text-xs sm:text-sm border border-pink-200 shadow-xs transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>←</span> Go Back
+                    </button>
+                    <button type="button" onclick="goToFirstSlide()" class="btn-pink-glow w-full sm:w-auto px-5 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
+                        <span>↺</span> Back to First Slide
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        let currentSlide = 0; // 0 = Sealed Front Cover, 1..5 = Wish Slides
+        const totalWishSlides = 5;
+        let isMusicPlaying = false;
+
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.volume = 0.65;
+
+        // Ensure background music plays continuously and repeats seamlessly
+        function ensureMusicPlaying() {
+            if (!bgMusic.paused && isMusicPlaying) return;
+            bgMusic.loop = true;
+            const playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isMusicPlaying = true;
+                }).catch(() => {
+                    // Autoplay blocked until first user interaction
+                });
+            }
+        }
+
+        // Fallback in case 'loop' attribute is ever ignored by a mobile browser
+        bgMusic.addEventListener('ended', () => {
+            bgMusic.currentTime = 0;
+            bgMusic.play().catch(() => {});
+        });
+
+        // Attempt immediate autoplay on load and unlock seamlessly on any first interaction
+        window.addEventListener('DOMContentLoaded', ensureMusicPlaying);
+        ['click', 'touchstart', 'keydown'].forEach(evt => {
+            document.addEventListener(evt, ensureMusicPlaying, { passive: true });
+        });
+
+        // Open Card from Front Cover -> Slide 1 + Start Background Music
+        function openCard() {
+            ensureMusicPlaying();
+
+            // Gentle pink sparkle burst on opening
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 35,
+                    spread: 55,
+                    origin: { y: 0.55 },
+                    colors: ['#f43f5e', '#ec4899', '#f9a8d4', '#fbcfe8']
+                });
+            }
+
+            goToSlide(1);
+        }
+
+        // Initialize Floating Petals & Sparkles
+        function createFloatingElements() {
+            const container = document.getElementById('floating-container');
+            const symbols = ['🌸', '✨', '🌷', '💖', '✿', '🩷'];
+            const count = 16;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.classList.add('floating-item');
+                el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+
+                const left = Math.random() * 100;
+                const duration = 11 + Math.random() * 11;
+                const delay = Math.random() * 10;
+                const size = 13 + Math.random() * 12;
+
+                el.style.left = `${left}vw`;
+                el.style.animationDuration = `${duration}s`;
+                el.style.animationDelay = `-${delay}s`;
+                el.style.fontSize = `${size}px`;
+
+                container.appendChild(el);
+            }
+        }
+
+        // Render Progress Dots for Wish Slides (1 to 5)
+        function renderDots() {
+            const dotsContainer = document.getElementById('progress-dots');
+            dotsContainer.innerHTML = '';
+            for (let i = 1; i <= totalWishSlides; i++) {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.setAttribute('aria-label', `Go to slide ${i}`);
+                dot.onclick = () => goToSlide(i);
+                dot.className = `h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    i === currentSlide
+                        ? 'w-6 bg-gradient-to-r from-rose-500 to-pink-500 shadow-xs'
+                        : 'w-2 bg-pink-300/75 hover:bg-pink-400'
+                }`;
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Navigate to a Specific Slide (0 = Cover, 1-5 = Wish Slides)
+        function goToSlide(targetSlide) {
+            if (targetSlide < 0 || targetSlide > totalWishSlides || targetSlide === currentSlide) return;
+
+            ensureMusicPlaying();
+
+            const currentEl = document.getElementById(`slide-${currentSlide}`);
+            const nextEl = document.getElementById(`slide-${targetSlide}`);
+            const headerEl = document.getElementById('wish-header');
+
+            currentEl.classList.remove('slide-active');
+            currentEl.classList.add('slide-hidden');
+
+            nextEl.classList.remove('slide-hidden');
+            nextEl.classList.add('slide-active');
+
+            currentSlide = targetSlide;
+
+            // Show or hide top progress bar depending on whether we're on the front cover
+            if (currentSlide === 0) {
+                headerEl.classList.add('hidden');
+                headerEl.classList.remove('flex');
+            } else {
+                headerEl.classList.remove('hidden');
+                headerEl.classList.add('flex');
+                document.getElementById('slide-indicator').innerText = `Wish ${currentSlide} of ${totalWishSlides}`;
+                renderDots();
+            }
+
+            // Trigger Confetti on the Final Slide (Slide 5)
+            if (currentSlide === totalWishSlides) {
+                triggerBirthdayConfetti();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalWishSlides) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        function goToFirstSlide() {
+            goToSlide(1);
+        }
+
+        // Celebratory Pink & Gold Confetti Burst
+        function triggerBirthdayConfetti() {
+            if (typeof confetti !== 'function') return;
+
+            const colors = ['#ec4899', '#f43f5e', '#f9a8d4', '#fbcfe8', '#fbbf24'];
+
+            confetti({
+                particleCount: 65,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: colors
+            });
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 40,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.65 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 40,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.65 },
+                    colors: colors
+                });
+            }, 300);
+        }
+
+        // Keyboard Arrow Support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                if (currentSlide === 0) openCard();
+                else nextSlide();
+            }
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Mobile Touch Swipe Support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const cardContainer = document.getElementById('card-container');
+
+        cardContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        cardContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const swipeDistance = touchEndX - touchStartX;
+            if (Math.abs(swipeDistance) > 45) {
+                if (swipeDistance < 0) {
+                    if (currentSlide === 0) openCard();
+                    else nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }, { passive: true });
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            createFloatingElements();
+        });
+    </script>
+<html>
+<head>
+
+</head>
+<body>
+
+    <audio autoplay loop>
+        <source src="Bdaymusic.mp3" 
+type="audio/mp3">
+    </audio>
+
+</body>
+</html>
